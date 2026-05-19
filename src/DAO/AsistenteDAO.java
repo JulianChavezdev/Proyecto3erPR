@@ -14,7 +14,7 @@ public class AsistenteDAO {
     private String password = "1234";
 
 
-    public void insertarAsistente(Asistente a) {
+    public void agregarAsistente(Asistente a) {
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             String sql = "INSERT INTO asistentes (nombre, email, edad) VALUES (?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -27,7 +27,7 @@ public class AsistenteDAO {
         }
     }
 
-    public void actualizarAsistente(int id, Asistente a) {
+    public void editarAsistente(int id, Asistente a) {
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             String sql = "UPDATE asistentes SET nombre = ?, email = ?, edad = ? WHERE id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -41,7 +41,7 @@ public class AsistenteDAO {
         }
     }
 
-    public void borrarAsistente(int id) {
+    public void eliminarAsistente(int id) {
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             String sql = "DELETE FROM asistentes WHERE id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -52,7 +52,7 @@ public class AsistenteDAO {
         }
     }
 
-    public void inscribirAsistente(int asistenteId, int eventoId, String fechaInscripcion) {
+    public void registrarAsistente(int asistenteId, int eventoId, String fechaInscripcion) {
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             String sql = "INSERT INTO inscripciones (asistente_id, evento_id, fecha_inscripcion) VALUES (?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -65,7 +65,7 @@ public class AsistenteDAO {
         }
     }
 
-    public void eliminarInscripcion(int asistenteId, int eventoId) {
+    public void quitarInscripcion(int asistenteId, int eventoId) {
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             String sql = "DELETE FROM inscripciones WHERE asistente_id = ? AND evento_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -77,7 +77,7 @@ public class AsistenteDAO {
         }
     }
 
-    public Map<Asistente, Double> obtenerAsistentesConGastoTotal() {
+    public Map<Asistente, Double> obtenerAsistentesConGastosTotales() {
         Map<Asistente, Double> resultados = new HashMap<>();
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             String sql = "SELECT a.*, SUM(e.precio) AS gasto_total FROM asistentes a " +
@@ -100,7 +100,7 @@ public class AsistenteDAO {
         return resultados;
     }
 
-    public double obtenerEdadMedia() {
+    public double obtenerEdadPromedio() {
         double media = 0;
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             String sql = "SELECT AVG(edad) AS media FROM asistentes";
@@ -115,7 +115,7 @@ public class AsistenteDAO {
         return media;
     }
 
-    public List<Asistente> obtenerAsistentesSinInscripcion() {
+    public List<Asistente> obtenerAsistentesSinInscripciones() {
         List<Asistente> asistentes = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             String sql = "SELECT a.* FROM asistentes a " +

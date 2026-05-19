@@ -15,7 +15,7 @@ public class EventoDAO {
     private String usuario = "root";
     private String password = "1234";
 
-    public void insertarEvento(Evento evento){
+    public void agregarEvento(Evento evento){
         try(Connection conexion = DriverManager.getConnection(url,usuario,password)){
             String sql = "INSERT INTO eventos (nombre,ubicacion,fecha, precio) VALUES (?,?,?,?) ";
             PreparedStatement pstm = conexion.prepareStatement(sql);
@@ -29,7 +29,7 @@ public class EventoDAO {
             System.out.println("Error al insertar evento "+e.getMessage());
         }
     }
-    public void actualizarEvento(Evento e, int id){
+    public void editarEvento(Evento e, int id){
         try(Connection conexion = DriverManager.getConnection(url,usuario,password)){
             String sql = "Update eventos SET nombre=?, ubicacion=?,fecha=?,precio=? WHERE id=? ";
             PreparedStatement pstm = conexion.prepareStatement(sql);
@@ -46,7 +46,7 @@ public class EventoDAO {
         }
     }
 
-    public void borrarEvento(int id){
+    public void eliminarEvento(int id){
         try(Connection conexion = DriverManager.getConnection(url,usuario,password)){
             String sql = "DELETE FROM eventos WHERE id=? ";
             PreparedStatement pstm = conexion.prepareStatement(sql);
@@ -58,7 +58,7 @@ public class EventoDAO {
 
         }
     }
-    public Map<String, Integer> obtenerEventosConTotalAsistentes(int id){
+    public Map<String, Integer> obtenerEventosConAsistentesTotales(int id){
         Map<String, Integer> mapa = new HashMap<>();
         try (Connection cone = DriverManager.getConnection(url,usuario,password)){
             String sql = "SELECT e.nombre, COUNT(i.asistente_id) AS total_asistentes FROM eventos e LEFT JOIN inscripciones i ON e.id = i.evento_id GROUP BY e.nombre ORDER BY total_asistentes DESC" ;
@@ -74,7 +74,7 @@ public class EventoDAO {
         return mapa;
     }
 
-    public List<Asistente> obtenerAsistenteDeEventos(int id){
+    public List<Asistente> obtenerAsistentesDelEvento(int id){
         List<Asistente> lista = new ArrayList<>();
         try(Connection cone = DriverManager.getConnection(url,usuario,password)){
             PreparedStatement pstm = cone.prepareStatement("SELECT a.nombre FROM eventos e INNER JOIN inscripciones i ON e.id = i.evento_id INNER JOIN  asistentes a ON i.asistente_id = a.id WHERE evento_id = ?");
@@ -91,7 +91,7 @@ public class EventoDAO {
         } return lista;
     }
 
-    public Map<String, Integer> obtenerEventoConMasDe2Asistentes(){
+    public Map<String, Integer> obtenerEventosConMasDe2Asistentes(){
         Map<String, Integer> mapa = new HashMap<>();
         try (Connection cone = DriverManager.getConnection(url,usuario,password)){
             String sql = "SELECT e.nombre, COUNT(i.asistente_id) AS total_asistentes FROM eventos e LEFT JOIN inscripciones i ON e.id = i.evento_id WHERE COUNT(i.asistente_id) < 2 GROUP BY e.nombre ORDER BY total_asistentes DESC" ;
@@ -106,7 +106,7 @@ public class EventoDAO {
         }
         return mapa;
     }
-    public List<String> obtenerTop3Eventos() {
+    public List<String> obtenerTop3EventosPorIngresos() {
         List<String> resultado = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(url, usuario, password)) {
             String sql = "SELECT e.nombre, (COUNT(i.asistente_id) * e.precio) AS ingresos " +
@@ -122,7 +122,7 @@ public class EventoDAO {
         }
         return resultado;
     }
-    public Evento obtenerEventoMasCaroPorUbicacion(String ubicacion) {
+    public Evento obtenerEventoMasCostosoPorUbicacion(String ubicacion) {
         try (Connection conn = DriverManager.getConnection(url, usuario, password)) {
             String sql = "SELECT * FROM eventos WHERE ubicacion = ? ORDER BY precio DESC LIMIT 1";
             PreparedStatement pstmt = conn.prepareStatement(sql);

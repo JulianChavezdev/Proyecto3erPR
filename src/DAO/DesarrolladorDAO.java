@@ -16,7 +16,7 @@ public class DesarrolladorDAO {
         this.emf = emf;
     }
 
-    public void insertarDesarrollador(Desarrollador desarrollador) {
+    public void agregarDesarrollador(Desarrollador desarrollador) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.persist(desarrollador);
@@ -24,7 +24,7 @@ public class DesarrolladorDAO {
         em.close();
     }
 
-    public void actualizarDesarrollador(int id, String nombre, int anyosExperiencia, double salario) {
+    public void editarDesarrollador(int id, String nombre, int anyosExperiencia, double salario) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         Desarrollador desarrollador = em.find(Desarrollador.class, id);
@@ -37,7 +37,7 @@ public class DesarrolladorDAO {
         em.close();
     }
 
-    public void borrarDesarrollador(int id) {
+    public void eliminarDesarrollador(int id) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         Desarrollador desarrollador = em.find(Desarrollador.class, id);
@@ -48,7 +48,7 @@ public class DesarrolladorDAO {
         em.close();
     }
 
-    public void asignarDesarrollador(int desarrolladorId, int proyectoId) {
+    public void vincularDesarrollador(int desarrolladorId, int proyectoId) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         Desarrollador desarrollador = em.find(Desarrollador.class, desarrolladorId);
@@ -61,7 +61,7 @@ public class DesarrolladorDAO {
         em.close();
     }
 
-    public void eliminarAsignacion(int desarrolladorId, int proyectoId) {
+    public void quitarAsignacion(int desarrolladorId, int proyectoId) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         Desarrollador desarrollador = em.find(Desarrollador.class, desarrolladorId);
@@ -74,7 +74,7 @@ public class DesarrolladorDAO {
         em.close();
     }
 
-    public List<Proyecto> obtenerProyectosDeDesarrollador(int id) {
+    public List<Proyecto> obtenerProyectosDelDesarrollador(int id) {
         EntityManager em = emf.createEntityManager();
         Desarrollador desarrollador = em.find(Desarrollador.class, id);
         List<Proyecto> proyectos = desarrollador.getProyectos();
@@ -83,7 +83,7 @@ public class DesarrolladorDAO {
         return proyectos;
     }
 
-    public double obtenerMediaExperiencia() {
+    public double obtenerExperienciaMedia() {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Double> query = em.createQuery(
                 "select avg(d.anyosExperiencia) from Desarrollador d",
@@ -93,7 +93,7 @@ public class DesarrolladorDAO {
         return media;
     }
 
-    public List<Desarrollador> obtenerDesarrolladoresSinProyecto() {
+    public List<Desarrollador> obtenerDesarrolladoresSinProyectos() {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Desarrollador> query = em.createQuery(
                 "select d from Desarrollador d where d.proyectos is empty",

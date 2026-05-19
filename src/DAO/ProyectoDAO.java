@@ -18,7 +18,7 @@ public class ProyectoDAO {
         this.emf = emf;
     }
 
-    public void insertarProyecto(Proyecto proyecto) {
+    public void agregarProyecto(Proyecto proyecto) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.persist(proyecto);
@@ -26,7 +26,7 @@ public class ProyectoDAO {
         em.close();
     }
 
-    public void actualizarProyecto(int id, String nombre, double presupuesto, String lenguajePrincipal) {
+    public void editarProyecto(int id, String nombre, double presupuesto, String lenguajePrincipal) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         Proyecto proyecto = em.find(Proyecto.class, id);
@@ -39,7 +39,7 @@ public class ProyectoDAO {
         em.close();
     }
 
-    public void borrarProyecto(int id) {
+    public void eliminarProyecto(int id) {
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         Proyecto proyecto = em.find(Proyecto.class, id);
@@ -50,7 +50,7 @@ public class ProyectoDAO {
         em.close();
     }
 
-    public Map<String, Long> obtenerNumDesarrolladoresPorProyecto() {
+    public Map<String, Long> obtenerCantidadDesarrolladoresPorProyecto() {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Object[]> query = em.createQuery(
                 "select p.nombre, count(d) from Proyecto p join p.desarrolladores d group by p.nombre",
@@ -66,7 +66,7 @@ public class ProyectoDAO {
         return res;
     }
 
-    public List<Desarrollador> obtenerDesarrolladoresDeProyecto(int id) {
+    public List<Desarrollador> obtenerDesarrolladoresDelProyecto(int id) {
         EntityManager em = emf.createEntityManager();
         Proyecto proyecto = em.find(Proyecto.class, id);
         List<Desarrollador> desarrolladores = proyecto.getDesarrolladores();
@@ -75,7 +75,7 @@ public class ProyectoDAO {
         return desarrolladores;
     }
 
-    public List<Proyecto> obtenerProyectosConMasDe5Desarrolladores() {
+    public List<Proyecto> obtenerProyectosConMasDeCincoDesarrolladores() {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Proyecto> query = em.createQuery(
                 "select p from Proyecto p join p.desarrolladores d group by p having count(d) > 5",
@@ -85,7 +85,7 @@ public class ProyectoDAO {
         return proyectos;
     }
 
-    public List<Proyecto> obtenerTop3Presupuesto() {
+    public List<Proyecto> obtenerTop3PorPresupuesto() {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Proyecto> query = em.createQuery(
                 "select p from Proyecto p order by p.presupuesto desc",
@@ -96,7 +96,7 @@ public class ProyectoDAO {
         return proyectos;
     }
 
-    public Proyecto obtenerProyectoMasBaratoPorLenguaje(String lenguaje) {
+    public Proyecto obtenerProyectoMasEconomicoPorLenguaje(String lenguaje) {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Proyecto> query = em.createQuery(
                 "select p from Proyecto p where p.lenguajePrincipal = :lenguaje order by p.presupuesto asc",
